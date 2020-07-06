@@ -7,7 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
@@ -18,14 +17,12 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.event.ActionListener;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.awt.event.ActionEvent;
 
 public class GUI
 {
 
-	private JFrame frmVmfobj;
+	private JFrame frame_VMF2OBJ;
 	private JTextArea vmf, vpk, ext, out; // It would be nice if we could have these all as local variables, but alas we
 											// can't get the text back out if we do that
 	private JCheckBox tools;
@@ -42,7 +39,9 @@ public class GUI
 				try
 				{
 					GUI window = new GUI();
-					window.frmVmfobj.setVisible(true);
+					Console console = new Console();
+					console.getConsole().setVisible(true);
+					window.frame_VMF2OBJ.setVisible(true);
 				} catch (Exception e)
 				{
 					e.printStackTrace();
@@ -65,11 +64,11 @@ public class GUI
 	 */
 	private void initialize()
 	{
-		frmVmfobj = new JFrame(); // Creates the visible window on screen
-		frmVmfobj.setTitle("VMF2OBJ"); // Sets application name
-		frmVmfobj.setIconImage(Toolkit.getDefaultToolkit().getImage(GUI.class.getResource("icon.png")));
-		frmVmfobj.setBounds(100, 100, 640, 400); // Sets size of the window
-		frmVmfobj.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Ends the program if you press the X button
+		frame_VMF2OBJ = new JFrame(); // Creates the visible window on screen
+		frame_VMF2OBJ.setTitle("VMF2OBJ"); // Sets application name
+		//frame_VMF2OBJ.setIconImage(Toolkit.getDefaultToolkit().getImage(GUI.class.getResource("icon.png")));
+		frame_VMF2OBJ.setBounds(100, 100, 640, 400); // Sets size of the window
+		frame_VMF2OBJ.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Ends the program if you press the X button
 		GridBagLayout gridBagLayout = new GridBagLayout(); // All this below until the try statement just sets up the
 															// constraints
 		gridBagLayout.columnWidths = new int[]
@@ -80,7 +79,7 @@ public class GUI
 		{ 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[]
 		{ 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
-		frmVmfobj.getContentPane().setLayout(gridBagLayout);
+		frame_VMF2OBJ.getContentPane().setLayout(gridBagLayout);
 
 		try
 		{
@@ -93,13 +92,13 @@ public class GUI
 		{}
 
 		JLabel label_logo = new JLabel("");
-		label_logo.setIcon(new ImageIcon(GUI.class.getResource("logo.png"))); // Gotta put a big logo
+		//label_logo.setIcon(new ImageIcon(GUI.class.getResource("logo.png"))); // Gotta put a big logo
 																				// somewhere, right?
 		GridBagConstraints gbc_label_logo = new GridBagConstraints();
 		gbc_label_logo.insets = new Insets(0, 0, 5, 5);
 		gbc_label_logo.gridx = 1;
 		gbc_label_logo.gridy = 0;
-		frmVmfobj.getContentPane().add(label_logo, gbc_label_logo);
+		frame_VMF2OBJ.getContentPane().add(label_logo, gbc_label_logo);
 
 		JLabel lblSeparate = new JLabel(
 				"Separate multiple file paths by putting them on separate lines. VMF File Path and Output File Path can only have one entry.");
@@ -108,14 +107,14 @@ public class GUI
 		gbc_lblSeparate.insets = new Insets(0, 0, 5, 0);
 		gbc_lblSeparate.gridx = 0;
 		gbc_lblSeparate.gridy = 1;
-		frmVmfobj.getContentPane().add(lblSeparate, gbc_lblSeparate);
+		frame_VMF2OBJ.getContentPane().add(lblSeparate, gbc_lblSeparate);
 
 		JLabel lblVmfFilePath = new JLabel("VMF File Path");
 		GridBagConstraints gbc_lblVmfFilePath = new GridBagConstraints();
 		gbc_lblVmfFilePath.insets = new Insets(0, 0, 5, 5);
 		gbc_lblVmfFilePath.gridx = 0;
 		gbc_lblVmfFilePath.gridy = 2;
-		frmVmfobj.getContentPane().add(lblVmfFilePath, gbc_lblVmfFilePath);
+		frame_VMF2OBJ.getContentPane().add(lblVmfFilePath, gbc_lblVmfFilePath);
 
 		vmf = new JTextArea();
 		GridBagConstraints gbc_input_VMFFilePath = new GridBagConstraints();
@@ -123,14 +122,14 @@ public class GUI
 		gbc_input_VMFFilePath.fill = GridBagConstraints.BOTH;
 		gbc_input_VMFFilePath.gridx = 1;
 		gbc_input_VMFFilePath.gridy = 2;
-		frmVmfobj.getContentPane().add(vmf, gbc_input_VMFFilePath);
+		frame_VMF2OBJ.getContentPane().add(vmf, gbc_input_VMFFilePath);
 
 		JLabel lblVpkFilePaths = new JLabel("VPK File Path(s)");
 		GridBagConstraints gbc_lblVpkFilePaths = new GridBagConstraints();
 		gbc_lblVpkFilePaths.insets = new Insets(0, 0, 5, 5);
 		gbc_lblVpkFilePaths.gridx = 0;
 		gbc_lblVpkFilePaths.gridy = 3;
-		frmVmfobj.getContentPane().add(lblVpkFilePaths, gbc_lblVpkFilePaths);
+		frame_VMF2OBJ.getContentPane().add(lblVpkFilePaths, gbc_lblVpkFilePaths);
 
 		vpk = new JTextArea();
 		GridBagConstraints gbc_input_VPKFilePath = new GridBagConstraints();
@@ -138,14 +137,14 @@ public class GUI
 		gbc_input_VPKFilePath.fill = GridBagConstraints.BOTH;
 		gbc_input_VPKFilePath.gridx = 1;
 		gbc_input_VPKFilePath.gridy = 3;
-		frmVmfobj.getContentPane().add(vpk, gbc_input_VPKFilePath);
+		frame_VMF2OBJ.getContentPane().add(vpk, gbc_input_VPKFilePath);
 
 		JLabel lblExternalPaths = new JLabel("External Path(s)");
 		GridBagConstraints gbc_lblExternalPaths = new GridBagConstraints();
 		gbc_lblExternalPaths.insets = new Insets(0, 0, 5, 5);
 		gbc_lblExternalPaths.gridx = 0;
 		gbc_lblExternalPaths.gridy = 4;
-		frmVmfobj.getContentPane().add(lblExternalPaths, gbc_lblExternalPaths);
+		frame_VMF2OBJ.getContentPane().add(lblExternalPaths, gbc_lblExternalPaths);
 
 		ext = new JTextArea();
 		GridBagConstraints gbc_input_externalFilePath = new GridBagConstraints();
@@ -153,14 +152,14 @@ public class GUI
 		gbc_input_externalFilePath.fill = GridBagConstraints.BOTH;
 		gbc_input_externalFilePath.gridx = 1;
 		gbc_input_externalFilePath.gridy = 4;
-		frmVmfobj.getContentPane().add(ext, gbc_input_externalFilePath);
+		frame_VMF2OBJ.getContentPane().add(ext, gbc_input_externalFilePath);
 
 		JLabel lblOutputFilePath = new JLabel("Output File Path");
 		GridBagConstraints gbc_lblOutputFilePath = new GridBagConstraints();
 		gbc_lblOutputFilePath.insets = new Insets(0, 0, 5, 5);
 		gbc_lblOutputFilePath.gridx = 0;
 		gbc_lblOutputFilePath.gridy = 5;
-		frmVmfobj.getContentPane().add(lblOutputFilePath, gbc_lblOutputFilePath);
+		frame_VMF2OBJ.getContentPane().add(lblOutputFilePath, gbc_lblOutputFilePath);
 
 		out = new JTextArea();
 		GridBagConstraints gbc_input_outputFilePath = new GridBagConstraints();
@@ -168,7 +167,7 @@ public class GUI
 		gbc_input_outputFilePath.fill = GridBagConstraints.BOTH;
 		gbc_input_outputFilePath.gridx = 1;
 		gbc_input_outputFilePath.gridy = 5;
-		frmVmfobj.getContentPane().add(out, gbc_input_outputFilePath);
+		frame_VMF2OBJ.getContentPane().add(out, gbc_input_outputFilePath);
 
 		JButton btnTestTextBoxes = new JButton("Compile");
 		btnTestTextBoxes.addActionListener(new ActionListener()
@@ -189,10 +188,8 @@ public class GUI
 					vmf2obj.compile(vmf.getText(), vpk.getText(), ext.getText(), out.getText(), tools.isSelected());
 				} catch (Exception f)
 				{
-					StringWriter sw = new StringWriter();
-					PrintWriter pw = new PrintWriter(sw);
-					f.printStackTrace(pw);
-					JOptionPane.showMessageDialog(null, sw.toString());
+
+					f.printStackTrace();
 				}
 			}
 		});
@@ -201,7 +198,7 @@ public class GUI
 		gbc_btnTestTextBoxes.insets = new Insets(0, 0, 0, 5);
 		gbc_btnTestTextBoxes.gridx = 0;
 		gbc_btnTestTextBoxes.gridy = 6;
-		frmVmfobj.getContentPane().add(btnTestTextBoxes, gbc_btnTestTextBoxes);
+		frame_VMF2OBJ.getContentPane().add(btnTestTextBoxes, gbc_btnTestTextBoxes);
 
 		tools = new JCheckBox("Ignore tool brushes (e.g. clip, hint, skip)");
 		tools.setHorizontalAlignment(SwingConstants.CENTER);
@@ -210,7 +207,7 @@ public class GUI
 		gbc_checkmark_toggleToolBrushes.anchor = GridBagConstraints.WEST;
 		gbc_checkmark_toggleToolBrushes.gridx = 1;
 		gbc_checkmark_toggleToolBrushes.gridy = 6;
-		frmVmfobj.getContentPane().add(tools, gbc_checkmark_toggleToolBrushes);
+		frame_VMF2OBJ.getContentPane().add(tools, gbc_checkmark_toggleToolBrushes);
 	}
 
 }

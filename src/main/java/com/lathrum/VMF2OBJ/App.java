@@ -3,7 +3,7 @@ package com.lathrum.VMF2OBJ;
 import java.util.*;
 import java.util.zip.*;
 import javax.imageio.ImageIO;
-import com.google.gson.*;
+//import com.google.gson.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -26,12 +26,22 @@ import com.lathrum.VMF2OBJ.dataStructure.texture.*;
 public class App
 {
 
-	public static Gson gson = new Gson();
-	public static Process proc;
-	public static String VTFLibPath;
-	public static String CrowbarLibPath;
-	public static boolean quietMode = false;
-	public static boolean ignoreTools = false;
+//	private Gson gson = new Gson();
+
+	private static final PipedInputStream normal = new PipedInputStream(); // This terrifying looking thing is the bytes
+																			// that the console is printing.
+	private static final PipedInputStream error = new PipedInputStream(); // We need these both to send them to our GUI
+																			// Console. error sends error messages, and
+																			// normal sends
+																			// everything else
+
+	
+	
+	private static Process proc;
+	private static String VTFLibPath;
+	private static String CrowbarLibPath;
+	private static boolean quietMode = false;
+	private static boolean ignoreTools = false;
 
 	/**
 	 * Sets up Crowbar and VTFCmd.
@@ -293,7 +303,41 @@ public class App
 		return entries;
 	}
 
-	// Used only in command line, GUI has its own version
+	
+	public PipedOutputStream sendNormal() throws IOException
+	{
+		PipedOutputStream sendNormal = new PipedOutputStream();
+		try {
+		sendNormal.connect(normal); // This thing stops the System.out from writing to console
+		System.setOut(new PrintStream(sendNormal, true)); // And this thing tells System.out that it should instead write to sendNormal
+		                                                  // Then from here we take sendNormal and give it to the GUI Console 
+		} catch (java.io.IOException ioe) {
+			String s = "Failed to direct System.out to PipedOutputStream setNormal. Details: \n" + ioe.getMessage();
+			sendNormal.write(s.getBytes(), 0, s.getBytes().length);
+		} catch (SecurityException se) {
+			String s = "Failed to direct System.out to PipedOutputStream setNormal. Details: \n" + se.getMessage();
+			sendNormal.write(s.getBytes(), 0, s.getBytes().length);
+		}
+		return sendNormal;
+	}
+	
+	public PipedOutputStream sendError() throws IOException
+	{
+		PipedOutputStream sendError = new PipedOutputStream();
+		try {
+		sendError.connect(error); // This thing stops the System.err from writing to console
+		System.setErr(new PrintStream(sendError, true)); // And this thing tells System.err that it should instead write to sendError
+		                                                  // Then from here we take sendNormal and give it to the GUI Console 
+		} catch (java.io.IOException ioe) {
+			String s = "Failed to direct System.out to PipedOutputStream setNormal. Details: \n" + ioe.getMessage();
+			sendError.write(s.getBytes(), 0, s.getBytes().length);
+		} catch (SecurityException se) {
+			String s = "Failed to direct System.out to PipedOutputStream setNormal. Details: \n" + se.getMessage();
+			sendError.write(s.getBytes(), 0, s.getBytes().length);
+		}
+		return sendError;
+	}
+	
 	public static void printProgressBar(String text)
 	{
 		if (quietMode)
@@ -317,17 +361,31 @@ public class App
 	}
 
 	/**
-	 * Used if run through GUI. Takes file paths for the VMF, VPK, External Paths, and converts it to an OBJ at the output path.
-	 * @param vmfFilePath - File path input. The VMF file to convert
-	 * @param vpkFilePath - VPK path input. If there's more than 1 VPK, separate each on a new line
-	 * @param externalPath - External path input. If there's more than 1 VPK, separate each on a new line
-	 * @param outputPath - Output path input. Where the OBJ should be put when it's done
-	 * @param ignoreToolBrushes - From the checkbox. Adds tool brushes to OBJ file if checked.
+	 * Used if run through GUI. Takes file paths for the VMF, VPK, External Paths,
+	 * and converts it to an OBJ at the output path.
+	 * 
+	 * @param vmfFilePath       - File path input. The VMF file to convert
+	 * @param vpkFilePath       - VPK path input. If there's more than 1 VPK,
+	 *                          separate each on a new line
+	 * @param externalPath      - External path input. If there's more than 1 VPK,
+	 *                          separate each on a new line
+	 * @param outputPath        - Output path input. Where the OBJ should be put
+	 *                          when it's done
+	 * @param ignoreToolBrushes - From the checkbox. Adds tool brushes to OBJ file
+	 *                          if checked.
 	 * @throws Exception - If something goes wrong.
 	 */
 	public void compile(String vmfFilePath, String vpkFilePath, String externalPath, String outputPath,
 			boolean ignoreToolBrushes) throws Exception
 	{
+		
+		
+		
+		
+		
+		
+		
+		
 		// Read Geometry
 		// Collapse Vertices
 		// Write objects
@@ -1365,8 +1423,11 @@ public class App
 	}
 
 	/**
-	 * Used if run through command line. Takes file paths for the VMF, VPK, External Paths, and converts it to an OBJ at the output path.
-	 * @param args - VMF File path, Output file path, VPK file path(s), External file path(s), and command line arguments, in that order
+	 * Used if run through command line. Takes file paths for the VMF, VPK, External
+	 * Paths, and converts it to an OBJ at the output path.
+	 * 
+	 * @param args - VMF File path, Output file path, VPK file path(s), External
+	 *             file path(s), and command line arguments, in that order
 	 * @throws Exception
 	 */
 	public static void main(String args[]) throws Exception

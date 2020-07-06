@@ -20,8 +20,8 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 	{
 		// create all components and add them
 		frame_VMF2OBJConsole = new JFrame("Java Console");
-		//frame_VMF2OBJConsole.setIconImage(
-		//		Toolkit.getDefaultToolkit().getImage(Console.class.getResource("/com/lathrum/VMF2OBJ/icon.png")));
+		frame_VMF2OBJConsole.setIconImage(
+				Toolkit.getDefaultToolkit().getImage(Console.class.getResource("/resources/icon.png")));
 		frame_VMF2OBJConsole.setTitle("VMF2OBJ Console");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Dimension frameSize = new Dimension((int) (screenSize.width / 2), (int) (screenSize.height / 2));

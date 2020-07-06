@@ -66,7 +66,7 @@ public class GUI
 	{
 		frame_VMF2OBJ = new JFrame(); // Creates the visible window on screen
 		frame_VMF2OBJ.setTitle("VMF2OBJ"); // Sets application name
-		//frame_VMF2OBJ.setIconImage(Toolkit.getDefaultToolkit().getImage(GUI.class.getResource("icon.png")));
+		frame_VMF2OBJ.setIconImage(Toolkit.getDefaultToolkit().getImage(GUI.class.getResource("/resources/icon.png")));
 		frame_VMF2OBJ.setBounds(100, 100, 640, 400); // Sets size of the window
 		frame_VMF2OBJ.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Ends the program if you press the X button
 		GridBagLayout gridBagLayout = new GridBagLayout(); // All this below until the try statement just sets up the
@@ -92,7 +92,7 @@ public class GUI
 		{}
 
 		JLabel label_logo = new JLabel("");
-		//label_logo.setIcon(new ImageIcon(GUI.class.getResource("logo.png"))); // Gotta put a big logo
+		label_logo.setIcon(new ImageIcon(GUI.class.getResource("/resources/logo.png"))); // Gotta put a big logo
 																				// somewhere, right?
 		GridBagConstraints gbc_label_logo = new GridBagConstraints();
 		gbc_label_logo.insets = new Insets(0, 0, 5, 5);

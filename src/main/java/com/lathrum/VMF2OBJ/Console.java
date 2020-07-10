@@ -45,15 +45,12 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 		text_Console.setFont(new Font("Consolas", Font.PLAIN, 16));
 		text_Console.setBackground(Color.BLACK);
 		text_Console.setEditable(false);
-		JButton button = new JButton("clear");
 
 		frame_VMF2OBJConsole.getContentPane().setLayout(new BorderLayout());
 		frame_VMF2OBJConsole.getContentPane().add(new JScrollPane(text_Console), BorderLayout.CENTER);
-		frame_VMF2OBJConsole.getContentPane().add(button, BorderLayout.SOUTH);
 		frame_VMF2OBJConsole.setVisible(true);
 
 		frame_VMF2OBJConsole.addWindowListener(this);
-		button.addActionListener(this);
 
 		try
 		{
@@ -159,7 +156,7 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 				if (pin.available() != 0)
 				{
 					String input = this.readLine(pin);
-					text_Console.setText(text_Console.getText() + input);
+					text_Console.append(input + '\n');
 				}
 				if (quit)
 					return;
@@ -175,7 +172,7 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 				if (pin2.available() != 0)
 				{
 					String input = this.readLine(pin2);
-					text_Console.setText(text_Console.getText() + input);
+					text_Console.append(input + '\n');
 				}
 				if (quit)
 					return;
@@ -199,7 +196,7 @@ public class Console extends WindowAdapter implements WindowListener, ActionList
 			byte b[] = new byte[available];
 			in.read(b);
 			input = input + new String(b, 0, b.length);
-		} while (!input.endsWith("\n") && !input.endsWith("\r\n") && !quit);
+		} while (!quit);
 		return input;
 	}
 

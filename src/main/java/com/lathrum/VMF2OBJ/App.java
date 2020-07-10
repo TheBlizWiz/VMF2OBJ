@@ -318,6 +318,7 @@ public class App
 			String s = "Failed to direct System.out to PipedOutputStream setNormal. Details: \n" + se.getMessage();
 			sendNormal.write(s.getBytes(), 0, s.getBytes().length);
 		}
+		sendNormal.flush();
 		return sendNormal;
 	}
 	
@@ -335,6 +336,7 @@ public class App
 			String s = "Failed to direct System.out to PipedOutputStream setNormal. Details: \n" + se.getMessage();
 			sendError.write(s.getBytes(), 0, s.getBytes().length);
 		}
+		sendError.flush();
 		return sendError;
 	}
 	
@@ -409,9 +411,9 @@ public class App
 		try
 		{
 			outPath = outputPath;
-			objName = outPath + ".obj";
-			matLibName = outPath + ".mtl";
-
+			objName = outPath + vmfFilePath.substring(vmfFilePath.lastIndexOf("\\"), vmfFilePath.length()-4) + ".obj";
+			matLibName = outPath + vmfFilePath.substring(vmfFilePath.lastIndexOf("\\"), vmfFilePath.length()-4) + ".mtl";
+			
 			if (!externalPath.equals(""))
 			{
 				if (externalPath.contains("\n")) // Is there more than one external path?
@@ -1419,7 +1421,7 @@ public class App
 		objFile.close();
 		materialFile.close();
 
-		System.out.println("Conversion complete! Output can be found at: " + Paths.get(outPath).getParent());
+		System.out.println("Conversion complete! Output can be found at: " + Paths.get(outPath));
 	}
 
 	/**
